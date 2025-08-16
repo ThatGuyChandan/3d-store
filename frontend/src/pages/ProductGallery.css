@@ -1,0 +1,124 @@
+.product-gallery {
+  padding: 40px;
+  background-color: #f8f9fa;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+}
+
+.product-gallery h1 {
+  text-align: center;
+  margin-bottom: 30px; /* Adjusted margin */
+  font-size: 2.8em;
+  color: #343a40;
+  font-weight: 300;
+}
+
+.search-container {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.search-container input {
+  width: 50%;
+  padding: 15px;
+  font-size: 1.1em;
+  border: 1px solid #dee2e6;
+  border-radius: 8px;
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.search-container input:focus {
+  outline: none;
+  border-color: #007bff;
+  box-shadow: 0 0 0 4px rgba(0, 123, 255, 0.15);
+}
+
+.product-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 40px;
+}
+
+.no-products-found {
+  text-align: center;
+  margin-top: 50px;
+  color: #6c757d;
+}
+
+.no-products-found h2 {
+  font-size: 1.8em;
+  margin-bottom: 10px;
+  color: #343a40;
+  font-weight: 300;
+}
+
+.no-products-found p {
+  font-size: 1.1em;
+}
+
+.product-card {
+  background-color: #fff;
+  border-radius: 15px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+  overflow: hidden;
+  transition: transform 0.3s, box-shadow 0.3s;
+  cursor: pointer;
+}
+
+.product-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 12px 25px rgba(0,0,0,0.1);
+}
+
+.product-card a {
+  text-decoration: none;
+  color: inherit;
+  display: block;
+}
+
+.product-card img {
+  width: 100%;
+  height: 220px;
+  object-fit: cover;
+}
+
+.product-card-content {
+  padding: 25px;
+}
+
+.product-card h2 {
+  font-size: 1.4em;
+  margin: 0 0 10px 0;
+  color: #343a40;
+}
+
+.product-card .category {
+  font-size: 0.9em;
+  color: #6c757d;
+  margin-bottom: 15px;
+}
+
+.product-card .price {
+  font-size: 1.3em;
+  font-weight: 500;
+  color: #007bff;
+}
+
+@media (max-width: 768px) {
+  .product-gallery {
+    padding: 20px;
+  }
+
+  .product-gallery h1 {
+    font-size: 2.2em;
+    margin-bottom: 30px;
+  }
+
+  .search-container input {
+    width: 90%;
+  }
+
+  .product-list {
+    grid-template-columns: 1fr;
+    gap: 25px;
+  }
+}
