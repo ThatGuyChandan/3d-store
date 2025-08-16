@@ -1,16 +1,5 @@
-const { Sequelize } = require('sequelize');
-const bcrypt = require('bcryptjs');
-
-// Initialize Sequelize
-const sequelize = new Sequelize('product_viewer', 'user', 'password', {
-  host: 'localhost',
-  dialect: 'postgres',
-  logging: false
-});
-
-// Import the models
-const Product = require('./models/product.model')(sequelize, Sequelize.DataTypes);
-const User = require('./models/user.model')(sequelize, Sequelize.DataTypes);
+require('dotenv').config();
+const db = require('./models');
 
 const products = [
   {
@@ -53,23 +42,23 @@ const products = [
 const seedDatabase = async () => {
   try {
     // Sync the model with the database, dropping the table if it exists
-    await sequelize.sync({ force: true });
+    await db.sequelize.sync({ force: true });
 
     // Create default user
-    await User.create({
+    await db.User.create({
       username: 'testuser',
       password: 'password123' // This will be hashed by the User model's beforeCreate hook
     });
     console.log('Default user created: testuser/password123');
 
     // Bulk create the products
-    await Product.bulkCreate(products);
+    await db.Product.bulkCreate(products);
     console.log('Database seeded successfully with 5 models!');
   } catch (error) {
     console.error('Error seeding database:', error);
   } finally {
     // Close the connection
-    await sequelize.close();
+    await db.sequelize.close();
   }
 };
 

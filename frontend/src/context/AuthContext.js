@@ -1,79 +1,85 @@
 import React, { createContext, useState, useEffect, useContext } from 'react';
 import axios from 'axios';
 
-const AuthContext = createContext(null);
+// Create an axios instance with the base URL from environment variables
+const api = axios.create({
+  baseURL: process.env.REACT_APP_API_URL,
+});
+
+const AuthContext = createContext();
+
+export const useAuth = () => {
+  return useContext(AuthContext);
+};
 
 export const AuthProvider = ({ children }) => {
-  const [token, setToken] = useState(localStorage.getItem('token'));
-  const [isAuthenticated, setIsAuthenticated] = useState(!!token);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [loading, setLoading] = useState(true);
-  const [username, setUsername] = useState(localStorage.getItem('username'));
+  const [username, setUsername] = useState('');
 
   useEffect(() => {
+    const token = localStorage.getItem('token');
+    const storedUsername = localStorage.getItem('username');
     if (token) {
-      axios.defaults.headers.common['x-auth-token'] = token;
       setIsAuthenticated(true);
-    } else {
-      delete axios.defaults.headers.common['x-auth-token'];
-      setIsAuthenticated(false);
+      setUsername(storedUsername);
     }
     setLoading(false);
-  }, [token]);
+  }, []);
 
   const login = async (username, password) => {
+    setLoading(true);
     try {
-      const res = await axios.post('http://localhost:5000/api/auth/login', { username, password });
-      setToken(res.data.token);
+      const res = await api.post('/auth/login', { username, password });
       localStorage.setItem('token', res.data.token);
-      setUsername(res.data.username);
       localStorage.setItem('username', res.data.username);
       setIsAuthenticated(true);
+      setUsername(res.data.username);
+      setLoading(false);
       return true;
     } catch (err) {
       console.error('Login failed:', err.response ? err.response.data : err.message);
-      setToken(null);
-      localStorage.removeItem('token');
-      setUsername(null);
-      localStorage.removeItem('username');
-      setIsAuthenticated(false);
-      return false;
-    }
-  };
-
-  const register = async (username, password) => {
-    try {
-      const res = await axios.post('http://localhost:5000/api/auth/register', { username, password });
-      setToken(res.data.token);
-      localStorage.setItem('token', res.data.token);
-      setUsername(res.data.username);
-      localStorage.setItem('username', res.data.username);
-      setIsAuthenticated(true);
-      return true;
-    } catch (err) {
-      console.error('Registration failed:', err.response ? err.response.data : err.message);
-      setToken(null);
-      localStorage.removeItem('token');
-      setUsername(null);
-      localStorage.removeItem('username');
-      setIsAuthenticated(false);
+      setLoading(false);
       return false;
     }
   };
 
   const logout = () => {
-    setToken(null);
     localStorage.removeItem('token');
-    setUsername(null);
     localStorage.removeItem('username');
     setIsAuthenticated(false);
-    delete axios.defaults.headers.common['x-auth-token'];
+    setUsername('');
+  };
+
+  const register = async (username, password) => {
+    setLoading(true);
+    try {
+      const res = await api.post('/auth/register', { username, password });
+      localStorage.setItem('token', res.data.token);
+      localStorage.setItem('username', res.data.username);
+      setIsAuthenticated(true);
+      setUsername(res.data.username);
+      setLoading(false);
+      return true;
+    } catch (err) {
+      console.error('Registration failed:', err.response ? err.response.data : err.message);
+      setLoading(false);
+      return false;
+    }
+  };
+
+  const value = {
+    isAuthenticated,
+    loading,
+    username,
+    login,
+    logout,
+    register,
   };
 
   return (
-    <AuthContext.Provider value={{ token, isAuthenticated, loading, username, login, register, logout }}>
-      {!loading && children}
+    <AuthContext.Provider value={value}>
+      {children}
     </AuthContext.Provider>
   );
 };
-
-export const useAuth = () => useContext(AuthContext);

@@ -1,15 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const jwt = require('jsonwebtoken');
-const { Sequelize } = require('sequelize');
-
-// Import the User model
-const sequelize = new Sequelize('product_viewer', 'user', 'password', {
-  host: 'localhost',
-  dialect: 'postgres',
-  logging: false
-});
-const User = require('../models/user.model')(sequelize, Sequelize.DataTypes);
+const { User } = require('../models'); // Assuming models are exported from a central index.js
 
 // @route   POST api/auth/register
 // @desc    Register user
@@ -31,7 +23,7 @@ router.post('/register', async (req, res) => {
 
     jwt.sign(
       payload,
-      process.env.JWT_SECRET || 'supersecretjwtkey',
+      process.env.JWT_SECRET,
       { expiresIn: '1h' },
       (err, token) => {
         if (err) throw err;
@@ -67,7 +59,7 @@ router.post('/login', async (req, res) => {
 
     jwt.sign(
       payload,
-      process.env.JWT_SECRET || 'supersecretjwtkey',
+      process.env.JWT_SECRET,
       { expiresIn: '1h' },
       (err, token) => {
         if (err) throw err;

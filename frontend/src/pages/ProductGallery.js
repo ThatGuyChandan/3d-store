@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import LoginPromptPopup from '../components/LoginPromptPopup'; // Import the new popup component
 import './ProductGallery.css';
@@ -16,13 +16,12 @@ const ProductGallery = ({ isPublic }) => {
     const fetchProducts = async () => {
       try {
         let response;
-        if (isPublic) {
-          // For public view, ensure no auth token is sent
-          response = await axios.get('http://localhost:5000/api/products', { headers: { 'x-auth-token': '' } });
-        } else {
-          // For authenticated view, axios interceptor will handle the token
-          response = await axios.get('http://localhost:5000/api/products');
-        }
+      if (isPublic) {
+        response = await axios.get(`${process.env.REACT_APP_API_URL}/products`);
+      } else {
+        const token = localStorage.getItem('token');
+        response = await axios.get(`${process.env.REACT_APP_API_URL}/products`, { headers: { 'x-auth-token': token } });
+      }
         setProducts(response.data);
       } catch (error) {
         console.error('Error fetching products:', error);
