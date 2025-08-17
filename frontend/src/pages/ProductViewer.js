@@ -87,6 +87,11 @@ const ProductViewer = () => {
               <OrbitControls makeDefault />
             </Suspense>
           </Canvas>
+          <div className="controls-info">
+            <p><strong>Rotate:</strong> Left-click + Drag</p>
+            <p><strong>Zoom:</strong> Scroll</p>
+            <p><strong>Pan:</strong> Right-click + Drag</p>
+          </div>
         </div>
         <div className="details-container">
           <h1>{product.name}</h1>

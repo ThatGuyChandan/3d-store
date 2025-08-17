@@ -16,7 +16,33 @@
   justify-content: center;
   align-items: center;
   background-color: transparent;
+  position: relative; /* Added for positioning context */
 }
+
+.controls-info {
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: rgba(0, 0, 0, 0.5);
+  color: white;
+  padding: 10px 20px;
+  border-radius: 10px;
+  display: flex;
+  gap: 20px;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  font-size: 0.9em;
+  pointer-events: none; /* Make it non-interactive */
+}
+
+.controls-info p {
+  margin: 0;
+}
+
+.controls-info strong {
+  font-weight: 600;
+}
+
 
 .details-container {
   flex: 1;
