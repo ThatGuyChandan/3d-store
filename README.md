@@ -1,4 +1,4 @@
-# Quleep - 3D Product Viewer
+# 3D Product Shop
 
 Quleep is a full-stack web application that allows users to view and interact with 3D models of products in a dynamic, web-based environment. It provides a seamless experience for users to register, log in, and browse a gallery of products, each with its own interactive 3D viewer.
 
