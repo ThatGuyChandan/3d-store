@@ -7,12 +7,12 @@ const authMiddleware = require('./middleware/auth.middleware');
 
 const app = express();
 const port = process.env.PORT || 5000;
-app.use(cors());
-// app.use(cors({
-//   origin: process.env.BASE_URL,
-//   methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-//   credentials: true,
-// }));
+// app.use(cors());
+app.use(cors({
+  origin: process.env.BASE_URL,
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  credentials: true,
+}));
 app.use(express.json());
 
 // PostgreSQL connection
