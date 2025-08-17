@@ -7,22 +7,32 @@ const authMiddleware = require('./middleware/auth.middleware');
 
 const app = express();
 const port = process.env.PORT || 5000;
-
-app.use(cors({
-  origin: process.env.BASE_URL,
-  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-  credentials: true,
-}));
+app.use(cors());
+// app.use(cors({
+//   origin: process.env.BASE_URL,
+//   methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+//   credentials: true,
+// }));
 app.use(express.json());
 
 // PostgreSQL connection
-const sequelize = new Sequelize(process.env.DB_NAME, process.env.DB_USER, process.env.DB_PASSWORD, {
-  host: process.env.DB_HOST,
-  dialect: process.env.DB_DIALECT,
-  logging: false // Disable logging for cleaner console output
-});
-
-
+const sequelize = new Sequelize(
+  process.env.DB_NAME,
+  process.env.DB_USER,
+  process.env.DB_PASSWORD,
+  {
+    host: process.env.DB_HOST,
+    port: process.env.DB_PORT || 5432,   // make sure port is included
+    dialect: process.env.DB_DIALECT || "postgres",
+    logging: false, // Disable logging for cleaner console output
+    dialectOptions: {
+      ssl: {
+        require: true,
+        rejectUnauthorized: false, // allow self-signed certs (RDS usually works with this)
+      },
+    },
+  }
+);
 
 db.sequelize.authenticate()
   .then(() => {
